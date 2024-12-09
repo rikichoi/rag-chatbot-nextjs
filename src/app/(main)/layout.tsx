@@ -16,7 +16,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "AgriHouse",
+  title: "MongoDB, LangChain RAG",
   description: "AI-driven Data Insights",
 };
 
