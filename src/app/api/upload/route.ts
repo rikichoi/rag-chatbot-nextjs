@@ -2,7 +2,7 @@ import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 
-import { getEmbeddingsTransformer, searchArgs } from '@/lib/openai';
+import { embeddingsInstance, searchArgs } from '@/lib/openai';
 import { MongoDBAtlasVectorSearch } from '@langchain/community/vectorstores/mongodb_atlas';
 
 export async function POST(request: Request) {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
                     };
                 });
 
-    
+
 
                 const textSplitter = new RecursiveCharacterTextSplitter({
                     chunkSize: 1000,
@@ -45,10 +45,12 @@ export async function POST(request: Request) {
 
                 console.log(splitDocs);
 
+
+
                 await MongoDBAtlasVectorSearch.fromTexts(
                     splitDocs.map(doc => doc.pageContent), [],
-                    getEmbeddingsTransformer(),
-                    searchArgs()
+                    embeddingsInstance,
+                    searchArgs
                 )
 
                 return new Response("successfully uploaded to MongoDB", {
@@ -57,7 +59,7 @@ export async function POST(request: Request) {
                     },
                     status: 201
                 })
-               
+
 
                 // return new Response(JSON.stringify(uploadedFile), {
                 //     headers: {
