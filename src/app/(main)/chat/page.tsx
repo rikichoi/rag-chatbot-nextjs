@@ -2,13 +2,24 @@
 
 import { useChat } from "ai/react";
 import { Bot, User } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
-    <div className=" max-h-[80vh] absolute bottom-12 left-0 right-0 mx-auto h-full flex w-full max-w-3xl flex-col justify-end  text-black">
-      <div className="bottom-0 overflow-y-scroll flex-col-reverse">
+    <div className="absolute bottom-12 left-0 right-0 mx-auto flex h-full max-h-[80vh] w-full max-w-3xl flex-col justify-end text-black">
+      <div
+        ref={scrollRef}
+        className="bottom-0 flex-col-reverse overflow-y-scroll"
+      >
         <div className="messages pr-4">
           {messages.map((m) => (
             <div
@@ -31,7 +42,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="chat-window  flex items-center pt-0">
+      <div className="chat-window flex items-center pt-0">
         <form
           className="flex w-full items-center justify-center space-x-2"
           onSubmit={handleSubmit}
